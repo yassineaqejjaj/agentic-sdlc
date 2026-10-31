@@ -50,7 +50,23 @@ Classic SDLC risks still apply. Agents add their own, listed with controls in [d
 
 ## Case studies
 
-- **[TrustRail](docs/case-studies/trustrail.md)** (draft): eight defects that passed the tests and were found only by running the real stack, and the process changes that followed.
+Ten drafts reconstructed from public commit histories. Each cites real commits, separates what the checks caught from what they missed, and leaves the author's review and rejection log open for confirmation. Short histories produce short studies; nothing is padded.
+
+| Project | Autonomy-relevant finding |
+|---|---|
+| [TrustRail](docs/case-studies/trustrail.md) | Eight defects passed the tests and were found only by running the real stack (containers, CI, deployment, live walkthrough) |
+| [NOVA](docs/case-studies/nova.md) | Production data exposed two training-loop defects that tests had missed |
+| [ORBIT](docs/case-studies/orbit.md) | Work cut off by a spend limit was labelled unverified; first end-to-end integration then fixed cross-module bugs |
+| [FORGE](docs/case-studies/forge.md) | A promotion policy and executable docs; thin commit bodies limit what can be reconstructed |
+| [MedGuard AI](docs/case-studies/medguard-ai.md) | A real-model judge listed as never run, kept visible in the README |
+| [SimuLearn](docs/case-studies/simulearn.md) | Tests prove the mock-provider flow only; live integrations declared unexecuted |
+| [ClassMind](docs/case-studies/classmind.md) | A clean-runner CI failure surfaced an install problem; browser tests never ran in CI |
+| [CarePilot](docs/case-studies/carepilot.md) | Fictional-data limit enforced in code; a staff metric was counting patient events |
+| [TRAIL Academy](docs/case-studies/trail-academy.md) | Stripe test-mode validation disproved the checkout model the unit tests assumed |
+| [Fencing Intelligence](docs/case-studies/fencing-intelligence.md) | A production-mode staging boot found three defects; verified and unverified claims separated |
+| [APEX F1 Pitwall](docs/case-studies/apex-f1-pitwall.md) | No documented defects; estimates are labelled, but tests check arithmetic, not fit to real races |
+
+**Pattern across the set:** the defects that cost most were found by executing the real thing, not by the test suite. Where a project declared what it had never run, the declaration was the most useful artifact in the repository.
 
 ## Templates
 
