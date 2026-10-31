@@ -68,9 +68,13 @@ Ten drafts reconstructed from public commit histories. Each cites real commits, 
 
 **Pattern across the set:** the defects that cost most were found by executing the real thing, not by the test suite. Where a project declared what it had never run, the declaration was the most useful artifact in the repository.
 
+## Companion to the books
+
+The framework and its case studies accompany two books, on [education](https://www.amazon.fr/dp/B0CN5PG7LT) and [healthcare](https://www.amazon.fr/dp/B0CVB848M6). See [which repositories test which ideas](docs/companion-books.md).
+
 ## Templates
 
-Copy these into a project: [`SPEC.md`](templates/SPEC.md) · [`AGENTS.md`](templates/AGENTS.md) · [`DECISION.md`](templates/DECISION.md) · [`REVIEW-CHECKLIST.md`](templates/REVIEW-CHECKLIST.md) · [`RELEASE.md`](templates/RELEASE.md)
+Click **Use this template** on GitHub, or copy these into a project: [`SPEC.md`](templates/SPEC.md) · [`AGENTS.md`](templates/AGENTS.md) · [`DECISION.md`](templates/DECISION.md) · [`REVIEW-CHECKLIST.md`](templates/REVIEW-CHECKLIST.md) · [`RELEASE.md`](templates/RELEASE.md)
 
 ## Adopting it in a week
 
