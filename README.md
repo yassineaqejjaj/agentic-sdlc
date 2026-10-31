@@ -48,6 +48,10 @@ Each stage has an entry condition, an exit criterion and a proof. Full table: [d
 
 Classic SDLC risks still apply. Agents add their own, listed with controls in [docs/agent-risks.md](docs/agent-risks.md): scope drift, tests written to pass, invented dependencies, leaked secrets, runaway cost, unreviewed volume, and context rot.
 
+## Case studies
+
+- **[TrustRail](docs/case-studies/trustrail.md)** (draft): eight defects that passed the tests and were found only by running the real stack, and the process changes that followed.
+
 ## Templates
 
 Copy these into a project: [`SPEC.md`](templates/SPEC.md) · [`AGENTS.md`](templates/AGENTS.md) · [`DECISION.md`](templates/DECISION.md) · [`REVIEW-CHECKLIST.md`](templates/REVIEW-CHECKLIST.md) · [`RELEASE.md`](templates/RELEASE.md)
