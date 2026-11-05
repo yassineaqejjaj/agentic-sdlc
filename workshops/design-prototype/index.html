@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Lab 03 · Concevoir deux agents UI dans Cursor | Agentic SDLC</title>
+<meta name="description" content="Atelier guidé de 2h15 pour construire deux sous-agents Cursor : design-generator et proto-builder." />
+<style>
+:root{--bg:#fbfcff;--text:#202638;--muted:#64748b;--blue:#2458c6;--blue2:#1647b1;--line:#e4e9f1;--panel:#fff;--code:#111827;--pink:#f6f8ff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--text);background:var(--bg);font-size:15px;line-height:1.75}
+a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+.topbar{height:62px;position:sticky;z-index:20;top:0;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 clamp(15px,3vw,42px);gap:20px}
+.brand{font-weight:780;font-size:17px;letter-spacing:-.5px;white-space:nowrap}.brand em{font-style:normal;color:var(--blue)}.brand .dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--blue);margin-right:9px}
+.topright{margin-left:auto;display:flex;gap:12px;align-items:center}.topright a{font-size:13px;font-weight:650;color:#475569;border:1px solid var(--line);border-radius:7px;padding:6px 10px}.topright a:hover{background:#f2f5fb;text-decoration:none}
+.layout{display:grid;grid-template-columns:260px minmax(0,870px) 1fr;gap:0;max-width:1520px;margin:auto;min-height:calc(100vh - 62px)}
+.sidebar{position:sticky;top:62px;height:calc(100vh - 62px);overflow:auto;border-right:1px solid var(--line);padding:29px 16px 28px 25px;background:#fff}.sidehead{font-size:11px;letter-spacing:1.3px;color:#818da5;font-weight:850;text-transform:uppercase;margin:10px 12px 16px}.sidebar nav{display:flex;flex-direction:column;gap:2px}.sidebar a{border-radius:8px;padding:9px 12px;font-size:13px;color:#3d4860;line-height:1.4}.sidebar a:hover,.sidebar a.active{background:#edf2ff;color:#1745b3;text-decoration:none;font-weight:650}.sidebottom{margin-top:25px;padding:14px;border:1px solid var(--line);border-radius:12px;font-size:12px;line-height:1.6;color:var(--muted)}.progressbox{margin-top:15px}.progressbar{height:6px;background:#e9edf5;border-radius:8px;overflow:hidden}.progressbar>div{height:100%;width:0;background:#325fc8;transition:.2s}.progresslabel{font-size:11px;color:var(--muted);margin-top:6px}
+.article{padding:34px clamp(22px,4.6vw,70px) 90px;max-width:940px;width:100%;margin:auto;min-width:0}.breadcrumb{display:flex;gap:9px;color:#8793a9;font-size:13px;align-items:center;margin-bottom:12px}.hero{padding:28px 32px 30px;background:linear-gradient(120deg,#ecf2ff,#f7f8ff 64%,#fff);border:1px solid #dbe6ff;border-radius:17px;margin-bottom:32px}.eyebrow{text-transform:uppercase;font-size:11px;letter-spacing:1.8px;font-weight:850;color:#315cc4}.hero h1{font-size:33px;letter-spacing:-1.4px;line-height:1.17;margin:12px 0 12px;color:#182643}.hero p{margin:0;font-size:14px;color:#526381;line-height:1.6}.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:21px}.chip{background:#fff;border:1px solid #d8e1f7;color:#34548b;font-size:12px;font-weight:650;border-radius:999px;padding:6px 11px}
+.article h2,.article h3{scroll-margin-top:85px}.article h2{font-size:24px;letter-spacing:-.7px;margin:46px 0 16px;line-height:1.25;border-top:1px solid var(--line);padding-top:32px}.article h3{font-size:18px;letter-spacing:-.3px;margin:28px 0 12px;line-height:1.3}.article>p,.article>ul,.article>ol{margin:12px 0}.article strong{color:#18243b}
+.article ul,.article ol{padding-left:24px}.article li{margin:4px 0}.article table{width:100%;border-collapse:collapse;font-size:13px;line-height:1.5;margin:19px 0 25px;background:#fff}.article th{background:#eef3fb;color:#34425d;text-align:left;font-weight:720}.article th,.article td{border:1px solid #dce4ef;padding:10px 12px;vertical-align:top}.article tr:nth-child(even) td{background:#fcfdff}
+.notebox{margin:24px 0;border:1px solid #dce7ff;background:#f2f6ff;border-left:4px solid #5b7fce;border-radius:0 9px 9px 0;padding:12px 20px;font-size:14px}.notebox p{margin:3px 0}.notebox strong{color:#1c4ba7}
+.codewrap{margin:17px 0 23px;background:var(--code);border:1px solid #273347;border-radius:11px;overflow:hidden;box-shadow:0 5px 17px rgba(18,32,60,.06)}.codebar{height:36px;padding:0 12px 0 16px;display:flex;align-items:center;color:#94a3b8;border-bottom:1px solid #2b3548;background:#202c40;font-size:11px;font-family:monospace}.copy-btn{margin-left:auto;padding:4px 9px;color:#e5edff;background:#33435f;border:1px solid #465776;cursor:pointer;border-radius:5px;font-size:11px}.copy-btn:hover{background:#485c7c}.codewrap pre{overflow:auto;margin:0;padding:15px 18px;color:#e6edf9;font-size:12.5px;line-height:1.58;tab-size:2}.codewrap code{font-family:SFMono-Regular,Consolas,"Liberation Mono",monospace;white-space:pre}.article p>code,.article li>code,.article td>code{color:#a12357;background:#f5eef4;padding:2px 5px;border-radius:4px;font-size:12px;overflow-wrap:anywhere}
+.article hr{border:0;border-top:1px solid var(--line);margin:34px 0}.check-item{list-style:none;margin-left:-16px!important}.task-checkbox{accent-color:var(--blue);width:16px;height:16px;vertical-align:middle;margin-right:6px;cursor:pointer}
+.footer{padding-top:28px;border-top:1px solid var(--line);margin-top:45px;font-size:13px;color:#8993a6}.floating{position:fixed;right:24px;bottom:24px;background:#1d4fc2;color:white;border:0;padding:10px 13px;border-radius:11px;box-shadow:0 5px 18px #2458c622;cursor:pointer;font-size:12px;z-index:21}.floating:hover{background:#1541aa}
+@media(max-width:1100px){.layout{grid-template-columns:230px minmax(0,1fr)}.sidebar{padding-left:12px}.article{padding-left:35px;padding-right:35px}}
+@media(max-width:760px){.layout{display:block}.sidebar{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line);padding:12px 20px}.sidebar nav{display:none}.sidebar.open nav{display:flex}.sidebar .sidebottom{display:none}.sidehead{margin:0;font-size:12px;cursor:pointer}.article{padding:22px 19px 70px}.hero{padding:22px 18px}.hero h1{font-size:27px}.topright a{font-size:11px}.article h2{font-size:22px}.floating{right:12px;bottom:12px}}
+@media print{.topbar,.sidebar,.floating,.copy-btn{display:none!important}.layout{display:block}.article{padding:0;max-width:100%}.hero{background:white;border:none;padding:0}.codewrap{break-inside:avoid;box-shadow:none}.article h2{page-break-after:avoid}.codewrap pre{white-space:pre-wrap;overflow:visible}}
+</style></head><body>
+<header class="topbar"><div class="brand"><span class="dot"></span>Agentic <em>SDLC</em> <span style="font-weight:450;color:#64748b">/ Labs</span></div><div class="topright"><a href="LAB.md">Version Markdown</a><a href="solutions/.cursor/agents/design-generator.md">Agent 1</a><a href="solutions/.cursor/agents/proto-builder.md">Agent 2</a></div></header>
+<div class="layout"><aside class="sidebar"><div class="sidehead">Sommaire du lab ▾</div><nav><a href="#competences-acquises">Compétences acquises</a>
+<a href="#avant-de-commencer">Avant de commencer</a>
+<a href="#le-parcours-de-l-atelier">Le parcours de l&#x27;atelier</a>
+<a href="#exercice-1-preparer-l-espace-de-travail">Exercice 1 · Préparer l&#x27;espace de travail</a>
+<a href="#exercice-2-creer-le-premier-agent-design-generator">Exercice 2 · Créer le premier agent : design-generator</a>
+<a href="#exercice-3-utiliser-design-generator-pour-produire-les-maquettes">Exercice 3 · Utiliser design-generator pour produire les maquettes</a>
+<a href="#exercice-4-creer-le-deuxieme-agent-proto-builder">Exercice 4 · Créer le deuxième agent : proto-builder</a>
+<a href="#exercice-5-generer-le-prototype-interactif-et-le-handoff">Exercice 5 · Générer le prototype interactif et le handoff</a>
+<a href="#exercice-6-faire-une-revue-croisee-et-transmettre-le-resultat">Exercice 6 · Faire une revue croisée et transmettre le résultat</a>
+<a href="#resultat-final-attendu">Résultat final attendu</a>
+<a href="#en-cas-de-probleme">En cas de problème</a>
+<a href="#pour-l-animateur">Pour l&#x27;animateur</a>
+<a href="#ressources">Ressources</a></nav><div class="sidebottom"><strong>Suivi de l'atelier</strong><div class="progressbox"><div class="progressbar"><div id="progress-fill"></div></div><div class="progresslabel" id="progress-label">0 point vérifié</div></div><p>Les points cochés sont mémorisés localement dans ce navigateur lorsque c'est possible.</p></div></aside>
+<main class="article"><div class="breadcrumb">Parcours Agentic SDLC <span>›</span> Atelier 3 <span>›</span> Design & Prototype</div>
+<section class="hero"><div class="eyebrow">Lab guidé · Cursor</div><h1>Concevoir deux agents UI<br>pour passer du besoin au prototype</h1><p>Construisez <strong>design-generator</strong> et <strong>proto-builder</strong> pas à pas, puis produisez un parcours testable et son dossier de transmission vers le développement.</p><div class="chips"><span class="chip">2 h 15</span><span class="chip">90 min de pratique</span><span class="chip">2 sous-agents</span><span class="chip">Résultat : prototype + handoff</span></div></section>
+
+<p><strong>Agentic SDLC · Atelier Design &amp; Prototype</strong><br/>
+<strong>Durée : 2 h 15 · dont 90 minutes de pratique</strong><br/>
+<strong>Niveau : débutant à intermédiaire · Format : groupes de 2 ou 3</strong></p>
+<blockquote class="notebox">
+<p><strong>Objectif</strong><br/>
+Concevoir dans Cursor deux sous-agents qui transforment un fichier de spécifications Markdown en écrans HTML, puis en prototype interactif. À la fin, les participants disposent d'un prototype démontrable et d'un dossier de transmission pour les ateliers Qualité &amp; Tests et Architecture &amp; Code.</p>
+</blockquote>
+<p>Ce lab reprend le principe d'un exercice Microsoft Learn : chaque étape vous indique <strong>quoi faire</strong>, <strong>quoi saisir</strong>, <strong>quoi observer</strong> et <strong>comment vérifier le résultat</strong>. Les deux agents finaux de référence sont disponibles dans le dossier <code>solutions/.cursor/agents/</code>.</p>
+<h2 id="competences-acquises">Compétences acquises</h2>
+<p>À la fin de cet atelier, vous saurez :</p>
+<ol>
+<li>créer un sous-agent Cursor dans <code>.cursor/agents/</code> ;</li>
+<li>définir sa mission, ses entrées, ses règles et ses livrables ;</li>
+<li>transmettre les requirements, le design system et le code existant à un agent ;</li>
+<li>utiliser <code>design-generator</code> pour créer les maquettes HTML ;</li>
+<li>utiliser <code>proto-builder</code> pour créer un prototype interactif autonome ;</li>
+<li>contrôler la couverture des exigences et transmettre un dossier utilisable par un agent de développement.</li>
+</ol>
+<h2 id="avant-de-commencer">Avant de commencer</h2>
+<h3 id="ce-qu-il-vous-faut">Ce qu'il vous faut</h3>
+<ul>
+<li>Cursor installé, avec un modèle accessible en mode <strong>Agent</strong>.</li>
+<li>Un projet contenant la base de code de l'application existante, accessible en lecture.</li>
+<li>Un fichier de spécifications détaillées, par exemple <code>docs/requirements.md</code>.</li>
+<li>Un design system <strong>déjà existant</strong> au format Markdown, par exemple <code>docs/design-system.md</code>.</li>
+<li>Le droit de créer des fichiers dans le dossier de travail.</li>
+<li>Facultatif : Git pour vérifier que l'application de production n'a pas été modifiée.</li>
+</ul>
+<p><strong>Important :</strong> les spécifications peuvent ne pas contenir de partie tests. Le but du lab est de concevoir et simuler l'expérience, pas d'écrire les tests de production.</p>
+<h3 id="structure-de-depart-recommandee">Structure de départ recommandée</h3>
+<div class="codewrap"><div class="codebar"><span>text</span><button class="copy-btn" type="button">Copier</button></div><pre><code class="language-text">mon-application/
+├── .cursor/
+│   └── agents/                  # à créer
+├── docs/
+│   ├── requirements.md          # fourni
+│   └── design-system.md         # fourni
+├── src/                         # code applicatif existant, selon le projet
+└── ...
+</code></pre></div>
+<p>Les chemins du lab sont <strong>des exemples</strong>. Si votre équipe utilise un autre emplacement, remplacez les chemins dans les prompts. La racine de la base de code peut être <code>.</code> et n'est pas nécessairement <code>src/</code>.</p>
+<blockquote class="notebox">
+<p><strong>Conseil de l'animateur</strong><br/>
+Avant l'atelier, mettez à disposition des groupes les mêmes documents d'entrée et une version de travail de l'application. Évitez les données de clients et les secrets. Les participants ne doivent pas créer un nouveau design system.</p>
+</blockquote>
+<h2 id="le-parcours-de-l-atelier">Le parcours de l'atelier</h2>
+<table>
+<thead>
+<tr>
+<th>Temps</th>
+<th>Activité</th>
+<th>Nature</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>00:00–00:10</td>
+<td>Comprendre le résultat visé</td>
+<td>Introduction</td>
+</tr>
+<tr>
+<td>00:10–00:20</td>
+<td>Observer une démonstration cible</td>
+<td>Démonstration</td>
+</tr>
+<tr>
+<td>00:20–00:30</td>
+<td>Vérifier les documents et le projet</td>
+<td>Préparation</td>
+</tr>
+<tr>
+<td>00:30–00:40</td>
+<td>Comprendre la structure d'un sous-agent Cursor</td>
+<td>Explication</td>
+</tr>
+<tr>
+<td>00:40–01:00</td>
+<td>Construire <code>design-generator</code></td>
+<td>Pratique, 20 min</td>
+</tr>
+<tr>
+<td>01:00–01:15</td>
+<td>Générer et contrôler les maquettes</td>
+<td>Pratique, 15 min</td>
+</tr>
+<tr>
+<td>01:15–01:30</td>
+<td>Construire <code>proto-builder</code></td>
+<td>Pratique, 15 min</td>
+</tr>
+<tr>
+<td>01:30–01:55</td>
+<td>Créer le prototype et le dossier de transmission</td>
+<td>Pratique, 25 min</td>
+</tr>
+<tr>
+<td>01:55–02:10</td>
+<td>Tester entre groupes et contrôler le dossier</td>
+<td>Pratique, 15 min</td>
+</tr>
+<tr>
+<td>02:10–02:15</td>
+<td>Faire le bilan</td>
+<td>Conclusion</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="exercice-1-preparer-l-espace-de-travail">Exercice 1 · Préparer l'espace de travail</h2>
+<p><strong>Durée : 10 minutes</strong></p>
+<h3 id="etape-1-ouvrir-le-bon-dossier">Étape 1. Ouvrir le bon dossier</h3>
+<ol>
+<li>Ouvrez Cursor.</li>
+<li>Sélectionnez <strong>File &gt; Open Folder</strong> et ouvrez la racine de l'application existante.</li>
+<li>Vérifiez que les fichiers <code>requirements.md</code> et <code>design-system.md</code> sont accessibles dans ce dossier ou dans un dossier du même espace de travail.</li>
+<li>Ouvrez le panneau de chat en mode <strong>Agent</strong>, et non uniquement le mode conversation sans outils.</li>
+</ol>
+<p>Dans le terminal intégré, vérifiez la présence des entrées (adaptez les chemins si nécessaire) :</p>
+<div class="codewrap"><div class="codebar"><span>bash</span><button class="copy-btn" type="button">Copier</button></div><pre><code class="language-bash">test -f docs/requirements.md &amp;&amp; echo "Requirements : OK"
+test -f docs/design-system.md &amp;&amp; echo "Design system : OK"
+</code></pre></div>
+<p><strong>Résultat attendu :</strong> les deux lignes affichent <code>OK</code>, et l'application existante est visible dans Cursor.</p>
+<blockquote class="notebox">
+<p><strong>Si un fichier manque</strong><br/>
+N'en demandez pas la création à l'agent. Demandez le bon chemin ou faites fournir le document manquant. Les agents doivent utiliser les documents déjà fournis.</p>
+</blockquote>
+<h3 id="etape-2-creer-le-dossier-des-agents">Étape 2. Créer le dossier des agents</h3>
+<p>Créez ce répertoire depuis l'arborescence de Cursor ou depuis le terminal :</p>
+<div class="codewrap"><div class="codebar"><span>bash</span><button class="copy-btn" type="button">Copier</button></div><pre><code class="language-bash">mkdir -p .cursor/agents
+</code></pre></div>
+<p><strong>Résultat attendu :</strong> <code>.cursor/agents/</code> existe dans le projet.</p>
+<h3 id="etape-3-definir-les-responsabilites">Étape 3. Définir les responsabilités</h3>
+<p>En groupe, associez chaque responsabilité au bon agent :</p>
+<table>
+<thead>
+<tr>
+<th>Responsabilité</th>
+<th>Agent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Analyser les exigences et le design system</td>
+<td><code>design-generator</code></td>
+</tr>
+<tr>
+<td>Repérer les écrans, états et actions</td>
+<td><code>design-generator</code></td>
+</tr>
+<tr>
+<td>Générer des maquettes HTML statiques</td>
+<td><code>design-generator</code></td>
+</tr>
+<tr>
+<td>Rendre les parcours cliquables</td>
+<td><code>proto-builder</code></td>
+</tr>
+<tr>
+<td>Simuler les réponses métier sans backend</td>
+<td><code>proto-builder</code></td>
+</tr>
+<tr>
+<td>Préparer les documents pour l'agent de code</td>
+<td><code>proto-builder</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Point clé :</strong> les deux agents ont des missions distinctes. Le second dépend des fichiers produits par le premier.</p>
+<hr/>
+<h2 id="exercice-2-creer-le-premier-agent-design-generator">Exercice 2 · Créer le premier agent : <code>design-generator</code></h2>
+<p><strong>Durée : 20 minutes</strong></p>
+<h3 id="etape-1-creer-un-sous-agent-cursor">Étape 1. Créer un sous-agent Cursor</h3>
+<p>Dans <code>.cursor/agents/</code>, créez le fichier <code>design-generator.md</code> et commencez par cette configuration :</p>
+<div class="codewrap"><div class="codebar"><span>yaml</span><button class="copy-btn" type="button">Copier</button></div><pre><code class="language-yaml">---
+name: design-generator
+description: Génère des maquettes HTML à partir des requirements, du design system Markdown fourni et de la base de code existante.
+model: inherit
+readonly: false
+is_background: false
+---
+</code></pre></div>
+<p><code>name</code> désigne le sous-agent, <code>description</code> permet à Cursor de décider quand l'utiliser, <code>model: inherit</code> reprend le modèle de l'agent principal, et <code>readonly: false</code> l'autorise à créer les fichiers de maquettes. <code>is_background: false</code> convient ici, car le deuxième agent attend les sorties du premier. <a href="https://cursor.com/docs/subagents">https://cursor.com/docs/subagents</a></p>
+<h3 id="etape-2-ecrire-la-mission-du-premier-agent">Étape 2. Écrire la mission du premier agent</h3>
+<p>Sous la configuration, ajoutez :</p>
+<div class="codewrap"><div class="codebar"><span>markdown</span><button class="copy-btn" type="button">Copier</button></div><pre><code class="language-markdown"># Mission
+
+Tu es un spécialiste UI. Tu transformes les exigences
+fonctionnelles d'une application existante en maquettes HTML.
+
+Tu dois respecter le design system fourni et les conventions
+visuelles du produit existant.
+
+Tu ne développes pas la fonctionnalité de production.
+</code></pre></div>
+<h3 id="etape-3-completer-les-instructions-avec-cursor">Étape 3. Compléter les instructions avec Cursor</h3>
+<p>Ouvrez un <strong>nouveau chat Agent</strong> dans Cursor et collez le prompt suivant :</p>
+<div class="codewrap"><div class="codebar"><span>text</span><button class="copy-btn" type="button">Copier</button></div><pre><code class="language-text">Aide-moi à compléter uniquement le fichier
+.cursor/agents/design-generator.md.
+
+Sa mission : transformer les requirements Markdown en maquettes
+HTML statiques, sans modifier l'application existante.
+
+Ajoute des sections claires :
+1. Entrées : requirementsPath, designSystemPath,
+   codebaseRoot, featureId et outputRoot.
+2. Priorités : requirements pour le besoin,
+   design system pour le visuel, code existant pour le contexte.
+3. Méthode : lecture, analyse UX, liste des écrans,
+   états, actions, puis génération des fichiers HTML.
+4. Règles : ne pas inventer de règles métier ;
+   ne jamais modifier le design system ou le code de production.
+5. Sorties : galerie HTML, manifeste JSON, correspondance
+   exigences-écrans et décisions UX.
+6. Contrôles de fin : existence des fichiers, JSON valide,
+   exigences couvertes et absence de changement en production.
+
+Conserve les identifiants REQ-* et ACT-* pour assurer
+la continuité avec le futur agent de prototypage.
+Écris uniquement les instructions de cet agent.
+</code></pre></div>
+<p>Relisez le fichier créé. Ne validez pas automatiquement toutes les propositions : vérifiez qu'il n'a pas demandé de recréer le design system et qu'il écrit uniquement dans le dossier de sortie.</p>
+<h3 id="etape-4-fixer-le-contrat-de-sortie">Étape 4. Fixer le contrat de sortie</h3>
+<p>Le dossier de sortie doit suivre ce modèle :</p>
+<div class="codewrap"><div class="codebar"><span>text</span><button class="copy-btn" type="button">Copier</button></div><pre><code class="language-text">design-output/&lt;featureId&gt;/
+├── screens/
+│   ├── index.html
+│   ├── assets/styles.css
+│   ├── &lt;screen-id&gt;--default.html
+│   └── &lt;screen-id&gt;--error.html       # si nécessaire
+├── screens-manifest.json
+├── requirements-mapping.md
+├── ux-decisions.md
+└── design-review.md
+</code></pre></div>
+<p>Faites ajouter explicitement à l'agent un manifeste JSON qui contient au minimum : <code>schemaVersion</code>, <code>featureId</code>, <code>sources</code>, <code>screens[]</code>, les <code>states[]</code>, les <code>actions[]</code> et les <code>openQuestions[]</code>. Chaque action doit porter un identifiant <code>ACT-*</code> et, si possible, le ou les identifiants <code>REQ-*</code> correspondants.</p>
+<p>Voici un <strong>exemple de structure</strong>, à ne pas confondre avec les exigences de votre projet :</p>
+<div class="codewrap"><div class="codebar"><span>json</span><button class="copy-btn" type="button">Copier</button></div><pre><code class="language-json">{
+  "schemaVersion": "1.0",
+  "featureId": "exemple-fonctionnalite",
+  "sources": {
+    "requirementsPath": "docs/requirements.md",
+    "designSystemPath": "docs/design-system.md",
+    "codebaseRoot": "."
+  },
+  "screens": [
+    {
+      "id": "liste",
+      "title": "Liste",
+      "states": [{"id": "default", "file": "screens/liste--default.html"}],
+      "requirements": ["REQ-001"],
+      "actions": [
+        {
+          "id": "ACT-001",
+          "label": "Consulter un élément",
+          "trigger": "clic",
+          "targetScreenId": "detail",
+          "expectedBehavior": "Afficher le détail",
+          "requirements": ["REQ-001"]
+        }
+      ]
+    }
+  ],
+  "openQuestions": []
+}
+</code></pre></div>
+<h3 id="verification-du-premier-agent">Vérification du premier agent</h3>
+<p>Dans Cursor, ouvrez <code>design-generator.md</code> et assurez-vous que :</p>
+<ul>
+<li class="check-item"><input aria-label="Marquer ce point comme vérifié" class="task-checkbox" type="checkbox"/> Le fichier se trouve bien dans <code>.cursor/agents/</code>.</li>
+<li class="check-item"><input aria-label="Marquer ce point comme vérifié" class="task-checkbox" type="checkbox"/> Il possède un en-tête YAML valide.</li>
+<li class="check-item"><input aria-label="Marquer ce point comme vérifié" class="task-checkbox" type="checkbox"/> Il mentionne les trois entrées existantes.</li>
+<li class="check-item"><input aria-label="Marquer ce point comme vérifié" class="task-checkbox" type="checkbox"/> Il n'autorise aucune modification du code de production.</li>
+<li class="check-item"><input aria-label="Marquer ce point comme vérifié" class="task-checkbox" type="checkbox"/> Il définit des sorties HTML et un manifeste JSON.</li>
+<li class="check-item"><input aria-label="Marquer ce point comme vérifié" class="task-checkbox" type="checkbox"/> Il conserve des identifiants liés aux exigences et aux interactions.</li>
+</ul>
+<p><strong>Corrigé de référence :</strong> <code>solutions/.cursor/agents/design-generator.md</code>.</p>
+<hr/>
+<h2 id="exercice-3-utiliser-design-generator-pour-produire-les-maquettes">Exercice 3 · Utiliser <code>design-generator</code> pour produire les maquettes</h2>
+<p><strong>Durée : 15 minutes</strong></p>
+<h3 id="etape-1-appeler-explicitement-le-sous-agent">Étape 1. Appeler explicitement le sous-agent</h3>
+<p>Dans le chat principal Cursor en mode Agent, saisissez :</p>
+<div class="codewrap"><div class="codebar"><span>text</span><button class="copy-btn" type="button">Copier</button></div><pre><code class="language-text">/design-generator
+
+Fonctionnalité : &lt;nom-de-la-fonctionnalite&gt;
+Requirements : docs/requirements.md
+Design system : docs/design-system.md
+Base de code existante : .
+Sortie : design-output/&lt;featureId&gt;/
+
+Lis les sources. Identifie les écrans, les états et les actions.
+Produis les maquettes HTML et le manifeste JSON.
+Ne modifie pas les fichiers de production.
+Signale les hypothèses et les exigences non couvertes.
+</code></pre></div>
+<blockquote class="notebox">
+<p><strong>Astuce</strong><br/>
+Cursor prend en charge l'appel explicite d'un sous-agent avec <code>/nom-agent</code>. Si votre version n'affiche pas cette suggestion, utilisez : « Utilise le sous-agent design-generator pour… » et vérifiez qu'une délégation a réellement eu lieu. <a href="https://cursor.com/docs/subagents">https://cursor.com/docs/subagents</a></p>
+</blockquote>
+<h3 id="etape-2-ouvrir-les-ecrans">Étape 2. Ouvrir les écrans</h3>
+<p>Après exécution, ouvrez <code>design-output/&lt;featureId&gt;/screens/index.html</code> dans un navigateur. Si l'ouverture directe ne convient pas à votre navigateur, utilisez un serveur local simple depuis la racine du dépôt :</p>
+<div class="codewrap"><div class="codebar"><span>bash</span><button class="copy-btn" type="button">Copier</button></div><pre><code class="language-bash">python3 -m http.server 8000
+</code></pre></div>
+<p>Puis ouvrez le chemin correspondant sur <code>http://localhost:8000/</code>.</p>
+<h3 id="etape-3-controler-le-resultat">Étape 3. Contrôler le résultat</h3>
+<p>Observez :</p>
+<ul>
+<li>La cohérence visuelle avec le design system.</li>
+<li>La couverture du parcours principal.</li>
+<li>La présence des états vides, erreurs et succès lorsqu'ils sont requis.</li>
+<li>La présence d'un lien entre les actions et les exigences.</li>
+<li>Les questions ouvertes documentées dans <code>ux-decisions.md</code>.</li>
+</ul>
+<p>Vérifiez le JSON :</p>
+<div class="codewrap"><div class="codebar"><span>bash</span><button class="copy-btn" type="button">Copier</button></div><pre><code class="language-bash">python3 -m json.tool design-output/&lt;featureId&gt;/screens-manifest.json &gt; /dev/null
+</code></pre></div>
+<p>Remplacez <code>&lt;featureId&gt;</code> par le nom réel du dossier, sans conserver les chevrons dans la commande.</p>
+<p><strong>Résultat attendu :</strong> une galerie de maquettes HTML et un manifeste lisible par le deuxième agent.</p>
+<h3 id="point-de-controle-collectif">Point de contrôle collectif</h3>
+<p>Le groupe présente ses écrans en une minute : quel est le parcours, où se trouvent les actions, quelles hypothèses nécessitent une validation ? <strong>Ne passez à l'agent 2 qu'après cette revue.</strong></p>
+<hr/>
+<h2 id="exercice-4-creer-le-deuxieme-agent-proto-builder">Exercice 4 · Créer le deuxième agent : <code>proto-builder</code></h2>
+<p><strong>Durée : 15 minutes</strong></p>
+<h3 id="etape-1-creer-la-definition">Étape 1. Créer la définition</h3>
+<p>Dans <code>.cursor/agents/</code>, créez <code>proto-builder.md</code> :</p>
+<div class="codewrap"><div class="codebar"><span>yaml</span><button class="copy-btn" type="button">Copier</button></div><pre><code class="language-yaml">---
+name: proto-builder
+description: Transforme les maquettes de design-generator en prototype interactif autonome, puis prépare un dossier pour les ateliers Qualité et Développement.
+model: inherit
+readonly: false
+is_background: false
+---
+</code></pre></div>
+<p>Ajoutez ce rôle sous l'en-tête :</p>
+<div class="codewrap"><div class="codebar"><span>markdown</span><button class="copy-btn" type="button">Copier</button></div><pre><code class="language-markdown"># Mission
+
+Tu transformes des maquettes HTML en prototype UX interactif.
+Tu interviens après design-generator.
+Tu simules les parcours métier avec des données fictives,
+sans backend réel, sans modifier le code de production.
+Tu produis aussi un dossier de transmission pour les agents
+chargés des tests et de la génération du code.
+</code></pre></div>
+<h3 id="etape-2-construire-les-instructions-avec-cursor">Étape 2. Construire les instructions avec Cursor</h3>
+<p>Dans un nouveau chat Cursor, utilisez :</p>
+<div class="codewrap"><div class="codebar"><span>text</span><button class="copy-btn" type="button">Copier</button></div><pre><code class="language-text">Complète uniquement .cursor/agents/proto-builder.md.
+
+Le sous-agent prend en entrée les requirements, le design system,
+la base de code, les maquettes et screens-manifest.json
+produits par design-generator.
+
+Ajoute des consignes pour :
+1. Conserver les identifiants REQ-*, ACT-* et screenId.
+2. Créer un prototype autonome en HTML, CSS et JS locaux.
+3. Relier les écrans et gérer les interactions réelles du prototype.
+4. Simuler les données et réponses métier, sans API réelle.
+5. Gérer succès, erreur, initial et autres états sourcés.
+6. Ajouter une fonction de réinitialisation des scénarios.
+7. Produire un guide de démo sponsor et des tâches UX.
+8. Créer le dossier handoff vers les agents Qualité et Code.
+9. Préparer les critères d'acceptation et un prompt
+   pour le futur agent de développement.
+10. Signaler toute hypothèse non validée.
+
+N'autorise des écritures que dans design-output/&lt;featureId&gt;/.
+N'invente pas de validations sponsor ou utilisateur.
+Le prototype doit guider l'UX, pas imposer son JS à la production.
+</code></pre></div>
+<h3 id="etape-3-fixer-les-livrables">Étape 3. Fixer les livrables</h3>
+<p>Demandez à l'agent d'écrire dans :</p>
+<div class="codewrap"><div class="codebar"><span>text</span><button class="copy-btn" type="button">Copier</button></div><pre><code class="language-text">design-output/&lt;featureId&gt;/
+├── interactive/
+│   ├── index.html
+│   ├── assets/styles.css
+│   ├── assets/app.js
+│   └── README.md
+├── prototype-flows.md
+├── sponsor-demo.md
+├── user-session-guide.md
+├── ux-changes.md
+└── handoff/
+    ├── IMPLEMENTATION_BRIEF.md
+    ├── ACCEPTANCE_CRITERIA.md
+    ├── TRACEABILITY.md
+    ├── handoff-manifest.json
+    └── PROMPT_FOR_DEV_AGENT.md
+</code></pre></div>
+<p>Le fichier <code>handoff-manifest.json</code> doit enregistrer les chemins des requirements, du design system, des maquettes, du prototype et des documents de transmission. Son statut initial est <code>review_required</code>. Les validations sponsor/utilisateurs sont <code>not_yet_validated</code> tant qu'elles n'ont pas eu lieu.</p>
+<h3 id="verification-du-deuxieme-agent">Vérification du deuxième agent</h3>
+<ul>
+<li class="check-item"><input aria-label="Marquer ce point comme vérifié" class="task-checkbox" type="checkbox"/> Les fichiers de <code>design-generator</code> sont des entrées obligatoires.</li>
+<li class="check-item"><input aria-label="Marquer ce point comme vérifié" class="task-checkbox" type="checkbox"/> Les actions <code>ACT-*</code> doivent produire un comportement ou une limite documentée.</li>
+<li class="check-item"><input aria-label="Marquer ce point comme vérifié" class="task-checkbox" type="checkbox"/> Le prototype ne fait aucun appel à un vrai backend.</li>
+<li class="check-item"><input aria-label="Marquer ce point comme vérifié" class="task-checkbox" type="checkbox"/> Un scénario peut être remis à zéro.</li>
+<li class="check-item"><input aria-label="Marquer ce point comme vérifié" class="task-checkbox" type="checkbox"/> Le dossier contient les documents requis pour la suite du SDLC.</li>
+<li class="check-item"><input aria-label="Marquer ce point comme vérifié" class="task-checkbox" type="checkbox"/> Les validations humaines ne sont jamais inventées.</li>
+</ul>
+<p><strong>Corrigé de référence :</strong> <code>solutions/.cursor/agents/proto-builder.md</code>.</p>
+<hr/>
+<h2 id="exercice-5-generer-le-prototype-interactif-et-le-handoff">Exercice 5 · Générer le prototype interactif et le handoff</h2>
+<p><strong>Durée : 25 minutes</strong></p>
+<h3 id="etape-1-lancer-le-deuxieme-sous-agent">Étape 1. Lancer le deuxième sous-agent</h3>
+<p>Dans le chat principal Cursor, saisissez :</p>
+<div class="codewrap"><div class="codebar"><span>text</span><button class="copy-btn" type="button">Copier</button></div><pre><code class="language-text">/proto-builder
+
+Fonctionnalité : &lt;nom-de-la-fonctionnalite&gt;
+Requirements : docs/requirements.md
+Design system : docs/design-system.md
+Base de code : .
+Dossier de maquettes : design-output/&lt;featureId&gt;/
+
+Reprends les maquettes et le screens-manifest.json.
+Crée interactive/index.html avec navigation et interactions.
+Utilise uniquement des données et réponses fictives.
+Prévois les états requis et un bouton Réinitialiser.
+Crée le script de démonstration, les tâches utilisateur
+et le dossier handoff pour Qualité et Développement.
+Ne modifie pas le code de production.
+</code></pre></div>
+<h3 id="etape-2-tester-le-parcours-utilisateur">Étape 2. Tester le parcours utilisateur</h3>
+<p>Ouvrez <code>design-output/&lt;featureId&gt;/interactive/index.html</code> dans le navigateur. Si nécessaire, utilisez le serveur local indiqué plus haut.</p>
+<p>Essayez réellement :</p>
+<ol>
+<li>de démarrer le parcours principal ;</li>
+<li>de renseigner un formulaire ou d'effectuer l'action centrale ;</li>
+<li>d'atteindre un état de confirmation ;</li>
+<li>de produire un état d'erreur prévu ;</li>
+<li>de réinitialiser le prototype ;</li>
+<li>de recommencer le même parcours.</li>
+</ol>
+<blockquote class="notebox">
+<p><strong>Note</strong><br/>
+Si une action n'est pas simulable, elle doit être annoncée comme telle dans l'interface et dans le dossier de transmission. Un bouton visuellement actif mais sans effet ne constitue pas un parcours interactif valide.</p>
+</blockquote>
+<h3 id="etape-3-lire-le-dossier-de-transmission">Étape 3. Lire le dossier de transmission</h3>
+<p>Ouvrez les documents suivants :</p>
+<table>
+<thead>
+<tr>
+<th>Fichier</th>
+<th>Utilité pour la suite</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>IMPLEMENTATION_BRIEF.md</code></td>
+<td>Ce que doit faire la fonctionnalité réelle</td>
+</tr>
+<tr>
+<td><code>ACCEPTANCE_CRITERIA.md</code></td>
+<td>Conditions vérifiables, liées aux exigences</td>
+</tr>
+<tr>
+<td><code>TRACEABILITY.md</code></td>
+<td>Correspondance exigences, écrans, actions, critères</td>
+</tr>
+<tr>
+<td><code>handoff-manifest.json</code></td>
+<td>Index machine-lisible des livrables et du statut</td>
+</tr>
+<tr>
+<td><code>PROMPT_FOR_DEV_AGENT.md</code></td>
+<td>Prompt pour démarrer l'agent de développement</td>
+</tr>
+</tbody>
+</table>
+<p>Le futur agent de code <strong>ne doit pas recopier automatiquement</strong> le JavaScript de démonstration. Il doit analyser l'architecture réelle de l'application, puis implémenter les comportements validés.</p>
+<h3 id="etape-4-valider-la-coherence-des-fichiers">Étape 4. Valider la cohérence des fichiers</h3>
+<div class="codewrap"><div class="codebar"><span>bash</span><button class="copy-btn" type="button">Copier</button></div><pre><code class="language-bash">python3 -m json.tool design-output/&lt;featureId&gt;/handoff/handoff-manifest.json &gt; /dev/null
+</code></pre></div>
+<p>Si votre projet utilise Git, vérifiez également les modifications :</p>
+<div class="codewrap"><div class="codebar"><span>bash</span><button class="copy-btn" type="button">Copier</button></div><pre><code class="language-bash">git status --short
+</code></pre></div>
+<p>La présence de nouveaux fichiers sous <code>.cursor/agents/</code> et <code>design-output/</code> est normale. Les fichiers de production existants ne doivent pas avoir été modifiés par ces deux agents.</p>
+<p><strong>Résultat attendu :</strong> un prototype qui fonctionne sur le parcours principal, plus un dossier exploitable par les ateliers suivants.</p>
+<hr/>
+<h2 id="exercice-6-faire-une-revue-croisee-et-transmettre-le-resultat">Exercice 6 · Faire une revue croisée et transmettre le résultat</h2>
+<p><strong>Durée : 15 minutes</strong></p>
+<h3 id="etape-1-echanger-les-postes">Étape 1. Échanger les postes</h3>
+<p>Le groupe A confie au groupe B une tâche métier formulée comme un objectif, <strong>sans indiquer où cliquer</strong>. Le groupe B réalise le parcours et le groupe A note :</p>
+<ul>
+<li>si le parcours aboutit ;</li>
+<li>les hésitations et incompréhensions ;</li>
+<li>les erreurs de navigation ;</li>
+<li>les actions qui ne fonctionnent pas ;</li>
+<li>les questions sur les règles métier.</li>
+</ul>
+<p>Puis inversez les rôles.</p>
+<h3 id="etape-2-verifier-la-remise-pour-le-jeudi-et-le-vendredi">Étape 2. Vérifier la remise pour le jeudi et le vendredi</h3>
+<ul>
+<li class="check-item"><input aria-label="Marquer ce point comme vérifié" class="task-checkbox" type="checkbox"/> La galerie des écrans est consultable.</li>
+<li class="check-item"><input aria-label="Marquer ce point comme vérifié" class="task-checkbox" type="checkbox"/> Le prototype est utilisable et réinitialisable.</li>
+<li class="check-item"><input aria-label="Marquer ce point comme vérifié" class="task-checkbox" type="checkbox"/> Les requirements sont liés aux écrans et aux actions.</li>
+<li class="check-item"><input aria-label="Marquer ce point comme vérifié" class="task-checkbox" type="checkbox"/> Les questions ouvertes restent identifiées.</li>
+<li class="check-item"><input aria-label="Marquer ce point comme vérifié" class="task-checkbox" type="checkbox"/> Le guide de démonstration et les tâches utilisateur existent.</li>
+<li class="check-item"><input aria-label="Marquer ce point comme vérifié" class="task-checkbox" type="checkbox"/> Les critères d'acceptation sont documentés, sans prétendre avoir exécuté des tests.</li>
+<li class="check-item"><input aria-label="Marquer ce point comme vérifié" class="task-checkbox" type="checkbox"/> Le dossier <code>handoff/</code> est complet.</li>
+<li class="check-item"><input aria-label="Marquer ce point comme vérifié" class="task-checkbox" type="checkbox"/> Le code de production n'a pas été modifié.</li>
+</ul>
+<h3 id="etape-3-preparer-le-passage-de-relais-vers-le-developpement">Étape 3. Préparer le passage de relais vers le développement</h3>
+<p>Le vendredi, le responsable du développement pourra ouvrir un <strong>nouveau chat Cursor</strong> et utiliser le contenu de <code>handoff/PROMPT_FOR_DEV_AGENT.md</code>. Le prompt doit lui demander de lire les requirements originaux, le design system et le dossier de transmission, puis de proposer un plan d'implémentation adapté à l'application existante.</p>
+<p>Si <code>handoff-manifest.json</code> indique <code>review_required</code>, l'agent de développement doit identifier les validations encore nécessaires. Il ne doit pas supposer que le prototype a été approuvé par un sponsor ou des utilisateurs.</p>
+<hr/>
+<h2 id="resultat-final-attendu">Résultat final attendu</h2>
+<p>À la fin du lab, le projet contient au minimum :</p>
+<div class="codewrap"><div class="codebar"><span>text</span><button class="copy-btn" type="button">Copier</button></div><pre><code class="language-text">mon-application/
+├── .cursor/
+│   └── agents/
+│       ├── design-generator.md
+│       └── proto-builder.md
+├── docs/
+│   ├── requirements.md
+│   └── design-system.md
+├── design-output/
+│   └── &lt;featureId&gt;/
+│       ├── screens/index.html
+│       ├── screens-manifest.json
+│       ├── requirements-mapping.md
+│       ├── ux-decisions.md
+│       ├── interactive/index.html
+│       ├── sponsor-demo.md
+│       ├── user-session-guide.md
+│       └── handoff/
+│           ├── IMPLEMENTATION_BRIEF.md
+│           ├── ACCEPTANCE_CRITERIA.md
+│           ├── TRACEABILITY.md
+│           ├── handoff-manifest.json
+│           └── PROMPT_FOR_DEV_AGENT.md
+└── ... code existant, inchangé
+</code></pre></div>
+<p>Le résultat est une <strong>proposition UX testable</strong>, pas une fonctionnalité déjà implémentée en production.</p>
+<h2 id="en-cas-de-probleme">En cas de problème</h2>
+<table>
+<thead>
+<tr>
+<th>Symptôme</th>
+<th>Vérification / correction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cursor ne reconnaît pas le sous-agent</td>
+<td>Vérifier <code>.cursor/agents/&lt;nom&gt;.md</code>, la section YAML et le mode Agent. Mentionner explicitement <code>/design-generator</code> ou son nom.</td>
+</tr>
+<tr>
+<td>Cursor ne trouve pas les sources</td>
+<td>Vérifier que le bon projet est ouvert et donner les chemins exacts.</td>
+</tr>
+<tr>
+<td>Les écrans ne respectent pas le design system</td>
+<td>Demander à l'agent de citer les tokens utilisés et de corriger les écarts.</td>
+</tr>
+<tr>
+<td>Le prototype ne répond pas aux clics</td>
+<td>Contrôler les erreurs JavaScript et faire corriger l'action <code>ACT-*</code> concernée.</td>
+</tr>
+<tr>
+<td>Le prototype utilise de vraies API</td>
+<td>Stopper l'exécution et remplacer ces appels par des mocks locaux.</td>
+</tr>
+<tr>
+<td>Le dossier handoff ne suffit pas pour coder</td>
+<td>Vérifier la couverture REQ / écran / action / critère, puis compléter les points ouverts.</td>
+</tr>
+<tr>
+<td>La génération prend trop de temps</td>
+<td>Limiter la démonstration à un parcours métier prioritaire, sans perdre la traçabilité des autres exigences.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="pour-l-animateur">Pour l'animateur</h2>
+<p><strong>Avant :</strong> préparer les requirements, le design system et la base de code ; choisir une fonctionnalité réalisable avec 3 à 5 écrans ; vérifier l'accès à Cursor et au navigateur.</p>
+<p><strong>Pendant :</strong> faire expliquer aux participants pourquoi chaque consigne de l'agent existe ; demander une revue humaine entre les deux agents ; signaler les hypothèses inventées par l'IA ; garder le dernier quart d'heure pour l'observation utilisateur et le handoff.</p>
+<p><strong>Après :</strong> récupérer le dossier <code>design-output/&lt;featureId&gt;/</code> et les deux agents. La qualité du résultat se juge sur la couverture des exigences, la cohérence visuelle, la capacité à réaliser les parcours et la clarté du passage de relais.</p>
+<h3 id="bareme-indicatif">Barème indicatif</h3>
+<table>
+<thead>
+<tr>
+<th>Critère</th>
+<th style="text-align:right">Poids</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Couverture des exigences et traçabilité</td>
+<td style="text-align:right">25 %</td>
+</tr>
+<tr>
+<td>Respect du design system</td>
+<td style="text-align:right">20 %</td>
+</tr>
+<tr>
+<td>Interactions du prototype</td>
+<td style="text-align:right">25 %</td>
+</tr>
+<tr>
+<td>Dossier de transmission</td>
+<td style="text-align:right">20 %</td>
+</tr>
+<tr>
+<td>Contrôles et absence de changements en production</td>
+<td style="text-align:right">10 %</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ressources">Ressources</h2>
+<ul>
+<li><a href="https://microsoftlearning.github.io/mslearn-agent-quickstart/Instructions/Labs/01b-create-first-agent.html">Lab Microsoft Learn pris comme référence pour le format pédagogique</a></li>
+<li><a href="https://cursor.com/docs/subagents">Documentation officielle Cursor : Subagents</a></li>
+<li>Corrigé 1 : <code>solutions/.cursor/agents/design-generator.md</code></li>
+<li>Corrigé 2 : <code>solutions/.cursor/agents/proto-builder.md</code></li>
+</ul>
+
+<footer class="footer">Document d'atelier · version locale autonome · Références : Microsoft Learn et documentation Cursor.</footer></main></div><button class="floating" title="Retour en haut">↑ Haut de page</button><script>
+(function(){
+  const stateKey='cursor-lab-checks-v1';
+  const checks=[...document.querySelectorAll('.task-checkbox')];
+  let saved={};try{saved=JSON.parse(localStorage.getItem(stateKey)||'{}')}catch(e){}
+  checks.forEach((el,i)=>{el.checked=!!saved[i];el.addEventListener('change',()=>{saved[i]=el.checked;try{localStorage.setItem(stateKey,JSON.stringify(saved))}catch(e){};recalc()})});
+  function recalc(){let count=checks.filter(x=>x.checked).length;document.getElementById('progress-fill').style.width=(checks.length?count/checks.length*100:0)+'%';document.getElementById('progress-label').textContent=count+' / '+checks.length+' points vérifiés'}
+  recalc();
+  document.querySelectorAll('.copy-btn').forEach(b=>b.addEventListener('click',async()=>{let code=b.closest('.codewrap').querySelector('code').innerText;try{await navigator.clipboard.writeText(code);b.textContent='Copié';setTimeout(()=>b.textContent='Copier',1400)}catch(e){let t=document.createElement('textarea');document.body.appendChild(t);t.value=code;t.select();document.execCommand('copy');t.remove();b.textContent='Copié';setTimeout(()=>b.textContent='Copier',1400)}}));
+  const sections=[...document.querySelectorAll('h2[id]')],links=[...document.querySelectorAll('.sidebar nav a')];
+  const update=()=>{let id='';sections.forEach(h=>{if(h.getBoundingClientRect().top<160)id=h.id});links.forEach(a=>a.classList.toggle('active',a.hash==='#'+id))};window.addEventListener('scroll',update,{passive:true});update();
+  document.querySelector('.sidehead').addEventListener('click',()=>document.querySelector('.sidebar').classList.toggle('open'));
+  document.querySelector('.floating').addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+})();
+</script></body></html>
