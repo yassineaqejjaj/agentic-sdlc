@@ -58,7 +58,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid 
 /* The required brand-first lockup */
 .topbar { position:sticky; top:0; height:82px; z-index:30; display:flex; align-items:center; gap:22px; padding:0 clamp(22px, 4.4vw, 80px); background:rgba(255,255,255,.98); border-bottom:1px solid var(--line); box-shadow: 0 2px 16px rgba(60,60,58,.035); }
 .brand { display:flex; align-items:center; gap:19px; font-size:16px; font-weight:600; color:var(--dark); line-height:1.2; letter-spacing:-.04em; white-space:nowrap; }
-.devoteam-wordmark { color:var(--dark); font-size:24px; font-weight:800; letter-spacing:-.08em; }
+.brand-logo { display:block; height:46px; width:auto; max-width:220px; object-fit:contain; }
 .brand-divider { display:inline-block; height:29px; width:2px; border-radius:2px; background:var(--poppy); }
 .brand-program { color:var(--dark); font-size:14px; font-weight:700; letter-spacing:-.035em; }
 .brand-program small { color:#787875; font-weight:400; font-size:12px; letter-spacing:0; }
@@ -155,7 +155,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid 
 @media (max-width:790px) {
   .topbar { min-height:73px; height:auto; flex-wrap:wrap; justify-content:space-between; padding:15px 18px; }
   .brand { width:100%; }
-  .devoteam-wordmark { font-size:21px; }
+  .brand-logo { height:38px; }
   .topright { margin-left:0; width:100%; gap:8px; }
   .topright a { flex:1; font-size:12px; padding:8px 6px; }
   .layout { display:block; }
@@ -178,6 +178,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid 
   .floating { right:12px; bottom:12px; }
 }
 @media(max-width:430px){
+  .brand-logo { height:38px; }
   .brand-program small { display:none; }
   .hero-aside { grid-template-columns:1fr; }
   .hero-meta { grid-template-columns:1fr 1fr; }
@@ -199,7 +200,7 @@ a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid 
 
 </style>
 </head><body>
-<header class="topbar"><div class="brand"><span class="devoteam-wordmark">Devoteam</span><span class="brand-divider" aria-hidden="true"></span><span class="brand-program">Agentic SDLC <small>/ Learning lab</small></span></div><nav class="topright" aria-label="Ressources de l’atelier"><a href="LAB.md">Documentation</a><a href="solutions/.cursor/agents/design-generator.md">Agent 1</a><a href="solutions/.cursor/agents/proto-builder.md">Agent 2</a></nav></header>
+<header class="topbar"><div class="brand"><img src="devoteam-logo.png" alt="Devoteam" class="brand-logo"><span class="brand-divider" aria-hidden="true"></span><span class="brand-program">Agentic SDLC <small>/ Learning lab</small></span></div><nav class="topright" aria-label="Ressources de l’atelier"><a href="LAB.md">Documentation</a><a href="solutions/.cursor/agents/design-generator.md">Agent 1</a><a href="solutions/.cursor/agents/proto-builder.md">Agent 2</a></nav></header>
 <div class="layout"><aside class="sidebar"><div class="sidehead">Sommaire du lab ▾</div><nav><a href="#competences-acquises">Compétences acquises</a>
 <a href="#avant-de-commencer">Avant de commencer</a>
 <a href="#le-parcours-de-l-atelier">Le parcours de l&#x27;atelier</a>
