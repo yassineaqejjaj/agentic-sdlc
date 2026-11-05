@@ -7,7 +7,7 @@
 > **Objectif**  
 > Concevoir dans Cursor deux sous-agents qui transforment un fichier de spécifications Markdown en écrans HTML, puis en prototype interactif. À la fin, les participants disposent d'un prototype démontrable et d'un dossier de transmission pour les ateliers Qualité & Tests et Architecture & Code.
 
-Ce lab reprend le principe d'un exercice Microsoft Learn : chaque étape vous indique **quoi faire**, **quoi saisir**, **quoi observer** et **comment vérifier le résultat**. Les deux agents finaux de référence sont disponibles dans le dossier `solutions/.cursor/agents/`.
+Dans ce lab, chaque étape précise **quoi faire**, **quoi saisir**, **quoi observer** et **comment vérifier le résultat**. Les deux agents finaux de référence sont disponibles dans le dossier `solutions/.cursor/agents/`.
 
 ## Compétences acquises
 
@@ -587,7 +587,6 @@ Le résultat est une **proposition UX testable**, pas une fonctionnalité déjà
 
 ## Ressources
 
-- [Lab Microsoft Learn pris comme référence pour le format pédagogique](https://microsoftlearning.github.io/mslearn-agent-quickstart/Instructions/Labs/01b-create-first-agent.html)
 - [Documentation officielle Cursor : Subagents](https://cursor.com/docs/subagents)
 - Corrigé 1 : `solutions/.cursor/agents/design-generator.md`
 - Corrigé 2 : `solutions/.cursor/agents/proto-builder.md`
