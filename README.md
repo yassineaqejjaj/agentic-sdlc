@@ -1,5 +1,7 @@
 # Agentic SDLC: earned autonomy
 
+![IASEEN Constellation — agentic-sdlc](docs/assets/github-cover.svg)
+
 A practical framework for building software with AI coding agents while keeping humans accountable for what ships.
 
 > **Status: working framework, v0.1.** It is distilled from building NOVA, ORBIT, FORGE, TrustRail and several healthcare and education prototypes. It has not been validated by an independent study. Metrics are defined in [docs/metrics.md](docs/metrics.md) and marked *not yet measured* until they are.
