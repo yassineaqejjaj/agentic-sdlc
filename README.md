@@ -72,7 +72,7 @@ Ten drafts reconstructed from public commit histories. Each cites real commits, 
 
 ## Companion to the books
 
-The framework and its case studies accompany two books, on [education](https://www.amazon.fr/dp/B0CN5PG7LT) and [healthcare](https://www.amazon.fr/dp/B0CVB848M6). See [which repositories test which ideas](docs/companion-books.md).
+This framework accompanies **[SYMBIOSE](https://www.amazon.fr/dp/B0G48PY7S5)** and the **Leading with AI** books on [education](https://www.amazon.fr/dp/B0CN5PG7LT) and [healthcare](https://www.amazon.fr/dp/B0CVB848M6). Explore the [SYMBIOSE project map](docs/companion-books.md#symbiose), linking NOVA, ORBIT, FORGE, ARIS and this AI SDLC framework.
 
 ## Templates
 
