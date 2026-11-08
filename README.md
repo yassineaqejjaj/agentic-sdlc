@@ -6,7 +6,17 @@ A practical framework for building software with AI coding agents while keeping 
 
 > **Status: working framework, v0.1.** It is distilled from building NOVA, ORBIT, FORGE, TrustRail and several healthcare and education prototypes. It has not been validated by an independent study. Metrics are defined in [docs/metrics.md](docs/metrics.md) and marked *not yet measured* until they are.
 
-<p align="center"><img alt="Agentic development lifecycle" src="docs/assets/agentic-lifecycle.svg"/></p>
+```mermaid
+flowchart LR
+    intent["1 · Intent"] --> architecture["2 · Architecture"]
+    architecture --> build["3 · Agent build"]
+    build --> review["4 · Human review"]
+    review --> verify["5 · Verify"]
+    verify --> gate["6 · Release gate"]
+    gate --> deploy["7 · Deploy"]
+    deploy --> measure["8 · Measure"]
+    measure -->|"Feedback"| intent
+```
 
 ## The idea
 
@@ -104,3 +114,4 @@ Click **Use this template** on GitHub, or copy these into a project: [`SPEC.md`]
 ## Contributing
 
 Issues and pull requests welcome, especially field reports of where a level or gate failed. MIT licensed.
+

@@ -11,6 +11,10 @@ One paragraph: purpose, stack, how to run and test.
 - Never use real credentials or real personal data.
 - Ask before any irreversible or external action.
 
+## Architecture diagrams
+
+Author architecture, component, deployment, sequence, data-flow and state diagrams in Mermaid. Embed them in Markdown using fenced `mermaid` blocks, or keep Mermaid source for rendered application pages. Keep Mermaid as the editable source of truth; screenshots, brand artwork and directory listings are separate documentation assets.
+
 ## Commands
 - Install:
 - Test:
@@ -22,3 +26,4 @@ Paths the agent must not modify: secrets, migrations, release config.
 
 ## Definition of done
 Tests green, lint clean, diff small, spec criteria met, limits noted.
+
