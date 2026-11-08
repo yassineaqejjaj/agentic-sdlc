@@ -1,6 +1,20 @@
 # Companion code for the books
 
-Two books on leading AI adoption, and the repositories that put their ideas to the test. The books give the leadership view; the code tests it with synthetic data and declared limits.
+Three books by Yassine Aqejjaj, with links to their companion projects and engineering framework.
+
+## SYMBIOSE
+
+**[SYMBIOSE](https://www.amazon.fr/dp/B0G48PY7S5)** · Yassine Aqejjaj
+
+Explore the book alongside these projects:
+
+| Project | Connection |
+|---|---|
+| [NOVA](https://github.com/yassineaqejjaj/NOVA) | Agent orchestration, specialist coordination and human approvals |
+| [ORBIT](https://github.com/yassineaqejjaj/ORBIT) | Governed context, memory and provenance |
+| [FORGE](https://github.com/yassineaqejjaj/FORGE) | Agent evaluation, comparisons and regression gates |
+| [ARIS](https://github.com/yassineaqejjaj/ARIS) · Private beta | Enterprise missions with specialised agents and human approval gates |
+| [AI SDLC / Agentic SDLC](../README.md) | Development lifecycle, autonomy levels, review and release decisions |
 
 ## Education
 
@@ -19,7 +33,7 @@ Two books on leading AI adoption, and the repositories that put their ideas to t
 | Repository | What it tests | Case study |
 |---|---|---|
 | [MedGuard AI](https://github.com/yassineaqejjaj/medguard-ai) | Evaluating, reviewing and gating healthcare AI releases | [Case study](case-studies/medguard-ai.md) |
-| [CarePilot](https://github.com/yassineaqejjaj/CarePilot) | Administrative patient-journey coordination with human approval | [Case study](case-studies/carepilot.md) |
+| [M3aya Santé](https://github.com/yassineaqejjaj/CarePilot) | Administrative patient-journey coordination with human approval | [Case study](case-studies/carepilot.md) |
 | [SimuLearn](https://github.com/yassineaqejjaj/SimuLearn) | Patient-conversation practice for health trainees | [Case study](case-studies/simulearn.md) |
 
 ## How it connects to the framework
